@@ -418,7 +418,7 @@ async function hashPassword(password) {
 // Verify license key with Gumroad API
 async function verifyLicenseKey(key) {
   // Master/Emergency license key - ONLY FOR YOU AND EMERGENCIES
-  const MASTER_KEY = 'TABLOCKPRO-MASTER-2024-LIFETIME';
+  const MASTER_KEY = 'TABLOCKPRO-ABCD-1000-LIFETIME';
   
   // Check if it's the master key
   if (key === MASTER_KEY) {
