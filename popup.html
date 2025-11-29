@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tab Lock Pro</title>
+  <link rel="stylesheet" href="styles/popup.css">
+</head>
+<body>
+  <div class="container">
+    <!-- Header -->
+    <div class="header">
+      <div class="logo">
+        <span class="logo-icon">🔒</span>
+        <h1>Tab Lock Pro</h1>
+      </div>
+      <div class="pro-badge" id="proBadge" style="display: none;">
+        <span>✨ PRO</span>
+      </div>
+    </div>
+
+    <!-- Setup Section (shown if no password set) -->
+    <div id="setupSection" class="section" style="display: none;">
+      <div class="setup-card">
+        <div class="setup-icon">🔐</div>
+        <h2>Welcome to Tab Lock Pro</h2>
+        <p>Set up a master password to secure your tabs</p>
+        
+        <div class="input-group">
+          <input 
+            type="password" 
+            id="setupPassword" 
+            placeholder="Create master password"
+            autocomplete="new-password"
+          >
+        </div>
+        
+        <div class="input-group">
+          <input 
+            type="password" 
+            id="setupPasswordConfirm" 
+            placeholder="Confirm password"
+            autocomplete="new-password"
+          >
+        </div>
+        
+        <button class="btn btn-primary btn-full" id="setupBtn">
+          Set Master Password
+        </button>
+        
+        <div class="setup-note">
+          💡 Remember this password - you'll need it to unlock your tabs
+        </div>
+      </div>
+    </div>
+
+    <!-- Main Section -->
+    <div id="mainSection" class="section">
+      <!-- Current Tab Control -->
+      <div class="card">
+        <h3>Current Tab</h3>
+        <div class="tab-info" id="currentTabInfo">
+          <div class="tab-favicon">🌐</div>
+          <div class="tab-details">
+            <div class="tab-title" id="currentTabTitle">Loading...</div>
+            <div class="tab-url" id="currentTabUrl"></div>
+          </div>
+        </div>
+        
+        <div class="action-buttons">
+          <button class="btn btn-primary" id="lockCurrentBtn">
+            🔒 Lock This Tab
+          </button>
+          <button class="btn btn-secondary" id="unlockCurrentBtn" style="display: none;">
+            🔓 Unlock This Tab
+          </button>
+        </div>
+      </div>
+
+      <!-- Locked Tabs List -->
+      <div class="card">
+        <h3>Locked Tabs <span class="count" id="lockedCount">0</span></h3>
+        <div id="lockedTabsList" class="locked-tabs-list">
+          <div class="empty-state">
+            <div class="empty-icon">🔒</div>
+            <p>No locked tabs</p>
+            <small>Lock tabs to keep them private and secure</small>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quick Actions -->
+      <div class="card">
+        <h3>Quick Actions</h3>
+        <div class="quick-actions">
+          <button class="btn btn-outline" id="panicBtn">
+            🚨 Panic Lock All
+            <span class="pro-label" id="panicProLabel">PRO</span>
+          </button>
+          <button class="btn btn-outline" id="unlockAllBtn">
+            🔓 Unlock All Tabs
+          </button>
+        </div>
+      </div>
+
+      <!-- Pro Features Section -->
+      <div class="card pro-features" id="proFeaturesCard">
+        <div class="pro-header">
+          <h3>✨ Pro Features</h3>
+          <button class="btn btn-small btn-gold" id="upgradeBtn">
+            Upgrade Now
+          </button>
+        </div>
+        
+        <ul class="feature-list">
+          <li>✓ Unlimited tab locking (Free: 3 tabs)</li>
+          <li>✓ Auto-lock after inactivity</li>
+          <li>✓ Time-based auto-locking</li>
+          <li>✓ Domain-based auto-lock</li>
+          <li>✓ Incognito tab protection</li>
+          <li>✓ Stealth mode (generic placeholder)</li>
+          <li>✓ Panic button (Ctrl+Shift+L)</li>
+          <li>✓ Screenshot blur protection</li>
+          <li>✓ Session persistence</li>
+          <li>✓ Priority support & updates</li>
+        </ul>
+        
+        <div class="pricing">
+          <div class="price">$4.99</div>
+          <div class="price-note">One-time payment • Lifetime access</div>
+        </div>
+
+        <div style="margin-top: 15px; text-align: center;">
+          <button class="btn btn-outline btn-full" id="activateLicenseDirectBtn" style="background: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.3); color: white;">
+            🔑 Already Have a License? Activate Now
+          </button>
+        </div>
+      </div>
+
+      <!-- Settings Link -->
+      <div class="footer-links">
+        <button class="link-btn" id="settingsBtn">⚙️ Settings</button>
+        <button class="link-btn pro-settings-link" id="proSettingsBtn" style="display: none;">
+          <span class="gold-icon">⭐</span> Pro Settings
+        </button>
+        <button class="link-btn" id="aboutBtn">ℹ️ About</button>
+      </div>
+    </div>
+
+    <!-- Settings Section -->
+    <div id="settingsSection" class="section" style="display: none;">
+      <div class="section-header">
+        <button class="back-btn" id="backFromSettings">← Back</button>
+        <h2>Settings</h2>
+      </div>
+
+      <div class="card">
+        <h3>Security</h3>
+        
+        <div class="setting-item">
+          <div class="setting-info">
+            <div class="setting-label">Master Password</div>
+            <div class="setting-description">Change your master password</div>
+          </div>
+          <button class="btn btn-small" id="changePasswordBtn">Change</button>
+        </div>
+
+        <div class="setting-item">
+          <div class="setting-info">
+            <div class="setting-label">Biometric Authentication</div>
+            <div class="setting-description">Use Face ID or fingerprint</div>
+          </div>
+          <label class="toggle">
+            <input type="checkbox" id="biometricToggle">
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+      </div>
+
+      <div class="card" id="proSettingsCard">
+        <div class="pro-overlay">
+          <div class="pro-badge-large">✨ PRO ONLY</div>
+        </div>
+
+        <div class="pro-settings-header">
+          <h3><span class="pro-star">⭐</span> Pro Settings</h3>
+        </div>
+
+        <div class="setting-group">
+          <div class="setting-header">
+            <div class="setting-icon">⏰</div>
+            <div class="setting-title">Auto-lock Inactive Tabs</div>
+          </div>
+          <div class="setting-description">Automatically lock tabs after period of inactivity</div>
+          <select id="autoLockSelect" class="select-input select-full">
+            <option value="0">Disabled</option>
+            <option value="5">5 minutes</option>
+            <option value="10">10 minutes</option>
+            <option value="30">30 minutes</option>
+            <option value="60">1 hour</option>
+          </select>
+        </div>
+
+        <div class="setting-item">
+          <div class="setting-info">
+            <div class="setting-label">🕵️ Incognito Protection</div>
+            <div class="setting-description">Automatically lock all incognito tabs</div>
+          </div>
+          <label class="toggle">
+            <input type="checkbox" id="incognitoToggle">
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+
+        <div class="setting-item">
+          <div class="setting-info">
+            <div class="setting-label">👻 Stealth Mode</div>
+            <div class="setting-description">Show generic placeholder instead of lock screen</div>
+          </div>
+          <label class="toggle">
+            <input type="checkbox" id="stealthToggle">
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+
+        <div class="setting-item">
+          <div class="setting-info">
+            <div class="setting-label">💾 Session Persistence</div>
+            <div class="setting-description">Keep locks after browser restarts</div>
+          </div>
+          <label class="toggle">
+            <input type="checkbox" id="sessionToggle">
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+
+        <!-- Domain Auto-lock Section -->
+        <div class="pro-feature-section">
+          <div class="feature-section-header">
+            <div class="feature-icon">🌐</div>
+            <div class="feature-info">
+              <div class="feature-title">Domain Auto-lock</div>
+              <div class="feature-desc">Automatically lock specific websites (banking, email, etc.)</div>
+            </div>
+          </div>
+          <div class="domain-list" id="domainList">
+            <div class="empty-domains">No domains configured</div>
+          </div>
+          <button class="btn btn-outline btn-full" id="addDomainBtn">
+            + Add Domain
+          </button>
+        </div>
+
+        <!-- Time-based Locking Section -->
+        <div class="pro-feature-section">
+          <div class="feature-section-header">
+            <div class="feature-icon">🕐</div>
+            <div class="feature-info">
+              <div class="feature-title">Scheduled Auto-lock</div>
+              <div class="feature-desc">Lock all tabs during specific hours (e.g., work hours)</div>
+            </div>
+          </div>
+          
+          <div class="schedule-toggle">
+            <label class="toggle">
+              <input type="checkbox" id="scheduleEnabledToggle">
+              <span class="toggle-slider"></span>
+            </label>
+            <span class="toggle-label">Enable scheduled locking</span>
+          </div>
+
+          <div class="time-picker-container" id="timePickerContainer" style="display: none;">
+            <div class="time-picker-row">
+              <div class="time-picker">
+                <label>Start Time</label>
+                <select id="startHourSelect" class="select-input">
+                  <option value="0">12 AM</option>
+                  <option value="1">1 AM</option>
+                  <option value="2">2 AM</option>
+                  <option value="3">3 AM</option>
+                  <option value="4">4 AM</option>
+                  <option value="5">5 AM</option>
+                  <option value="6">6 AM</option>
+                  <option value="7">7 AM</option>
+                  <option value="8">8 AM</option>
+                  <option value="9" selected>9 AM</option>
+                  <option value="10">10 AM</option>
+                  <option value="11">11 AM</option>
+                  <option value="12">12 PM</option>
+                  <option value="13">1 PM</option>
+                  <option value="14">2 PM</option>
+                  <option value="15">3 PM</option>
+                  <option value="16">4 PM</option>
+                  <option value="17">5 PM</option>
+                  <option value="18">6 PM</option>
+                  <option value="19">7 PM</option>
+                  <option value="20">8 PM</option>
+                  <option value="21">9 PM</option>
+                  <option value="22">10 PM</option>
+                  <option value="23">11 PM</option>
+                </select>
+              </div>
+              <div class="time-separator">→</div>
+              <div class="time-picker">
+                <label>End Time</label>
+                <select id="endHourSelect" class="select-input">
+                  <option value="0">12 AM</option>
+                  <option value="1">1 AM</option>
+                  <option value="2">2 AM</option>
+                  <option value="3">3 AM</option>
+                  <option value="4">4 AM</option>
+                  <option value="5">5 AM</option>
+                  <option value="6">6 AM</option>
+                  <option value="7">7 AM</option>
+                  <option value="8">8 AM</option>
+                  <option value="9">9 AM</option>
+                  <option value="10">10 AM</option>
+                  <option value="11">11 AM</option>
+                  <option value="12">12 PM</option>
+                  <option value="13">1 PM</option>
+                  <option value="14">2 PM</option>
+                  <option value="15">3 PM</option>
+                  <option value="16">4 PM</option>
+                  <option value="17" selected>5 PM</option>
+                  <option value="18">6 PM</option>
+                  <option value="19">7 PM</option>
+                  <option value="20">8 PM</option>
+                  <option value="21">9 PM</option>
+                  <option value="22">10 PM</option>
+                  <option value="23">11 PM</option>
+                </select>
+              </div>
+            </div>
+            <div class="schedule-preview" id="schedulePreview">
+              Tabs will auto-lock from 9:00 AM to 5:00 PM
+            </div>
+            <button class="btn btn-primary btn-full" id="saveScheduleBtn">
+              Save Schedule
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>About</h3>
+        <div class="about-info">
+          <p><strong>Tab Lock Pro</strong></p>
+          <p>Version 1.0.0</p>
+          <p style="margin-top: 10px; font-size: 13px; color: #666;">
+            Secure your browser tabs with password and biometric protection.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Upgrade Modal -->
+    <div id="upgradeModal" class="modal" style="display: none;">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2>✨ Upgrade to Pro</h2>
+          <button class="close-btn" id="closeUpgradeModal">&times;</button>
+        </div>
+        
+        <div class="modal-body">
+          <div class="upgrade-price">
+            <div class="price-large">$4.99</div>
+            <div class="price-subtitle">One-time payment • Lifetime access</div>
+          </div>
+
+          <div class="upgrade-features">
+            <h4>Unlock all Pro features:</h4>
+            <ul>
+              <li>✓ Unlimited tab locking</li>
+              <li>✓ Auto-lock after inactivity</li>
+              <li>✓ Time-based auto-locking</li>
+              <li>✓ Domain-based auto-lock</li>
+              <li>✓ Incognito protection</li>
+              <li>✓ Stealth mode</li>
+              <li>✓ Panic button</li>
+              <li>✓ Session persistence</li>
+              <li>✓ Priority support</li>
+            </ul>
+          </div>
+
+          <button class="btn btn-primary btn-full btn-large" id="buyNowBtn">
+            🛒 Buy Now - $4.99
+          </button>
+
+          <div style="text-align: center; margin-top: 20px;">
+            <button class="link-btn" id="alreadyHaveLicenseBtn" style="color: #667eea; font-size: 16px;">
+              Already have a license key? Click here
+            </button>
+          </div>
+
+          <div class="payment-note">
+            Secure payment via Gumroad/Stripe
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- License Activation Modal -->
+    <div id="licenseModal" class="modal" style="display: none;">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2>Activate Pro License</h2>
+          <button class="close-btn" id="closeLicenseModal">&times;</button>
+        </div>
+        
+        <div class="modal-body">
+          <p>Enter your license key from Gumroad/Stripe:</p>
+          
+          <div class="input-group">
+            <input 
+              type="text" 
+              id="licenseKeyInput" 
+              placeholder="XXXX-XXXX-XXXX-XXXX"
+              autocomplete="off"
+            >
+          </div>
+
+          <button class="btn btn-primary btn-full" id="activateLicenseBtn">
+            Activate License
+          </button>
+
+          <div id="licenseError" class="error-message" style="display: none;"></div>
+          <div id="licenseSuccess" class="success-message" style="display: none;"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Messages -->
+    <div id="toast" class="toast"></div>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>

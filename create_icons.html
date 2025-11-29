@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Generate Icons</title>
+</head>
+<body>
+    <canvas id="canvas"></canvas>
+    <script>
+        function createIcon(size) {
+            const canvas = document.getElementById('canvas');
+            canvas.width = size;
+            canvas.height = size;
+            const ctx = canvas.getContext('2d');
+            
+            // Gradient background
+            const gradient = ctx.createLinearGradient(0, 0, size, size);
+            gradient.addColorStop(0, '#667eea');
+            gradient.addColorStop(1, '#764ba2');
+            ctx.fillStyle = gradient;
+            ctx.fillRect(0, 0, size, size);
+            
+            // Lock icon
+            ctx.fillStyle = '#ffffff';
+            const lockSize = size * 0.6;
+            const x = (size - lockSize) / 2;
+            const y = (size - lockSize) / 2;
+            
+            // Lock body
+            ctx.fillRect(x + lockSize * 0.2, y + lockSize * 0.4, lockSize * 0.6, lockSize * 0.5);
+            
+            // Lock shackle
+            ctx.strokeStyle = '#ffffff';
+            ctx.lineWidth = size * 0.08;
+            ctx.beginPath();
+            ctx.arc(x + lockSize / 2, y + lockSize * 0.35, lockSize * 0.25, Math.PI, 0, true);
+            ctx.stroke();
+            
+            // Keyhole
+            ctx.fillStyle = '#667eea';
+            ctx.beginPath();
+            ctx.arc(x + lockSize / 2, y + lockSize * 0.6, lockSize * 0.08, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.fillRect(x + lockSize / 2 - lockSize * 0.04, y + lockSize * 0.6, lockSize * 0.08, lockSize * 0.15);
+            
+            return canvas.toDataURL('image/png');
+        }
+        
+        // Generate icons
+        const sizes = [16, 32, 48, 128];
+        sizes.forEach(size => {
+            const dataUrl = createIcon(size);
+            const link = document.createElement('a');
+            link.download = `icon${size}.png`;
+            link.href = dataUrl;
+            link.click();
+        });
+    </script>
+</body>
+</html>
